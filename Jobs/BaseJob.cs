@@ -66,7 +66,9 @@ public abstract class BaseJob : IJob
             .StartNow() 
             : _timeInSeconds.HasValue 
                 ? TriggerBuilder.Create()
-                    .WithSimpleSchedule(sb => sb.WithIntervalInSeconds((int)_timeInSeconds.Value))
+                    .WithSimpleSchedule(sb => sb
+                        .WithIntervalInSeconds((int)_timeInSeconds.Value)
+                        .RepeatForever())
                     .StartNow()
                 : null;
 
