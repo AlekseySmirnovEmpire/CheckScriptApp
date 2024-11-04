@@ -75,7 +75,7 @@ public class SettingsConfig
                 return;
             }
 
-            Console.WriteLine("{0} - recovered after {1}", uri.Host, interval);
+            Console.WriteLine("{0} - recovered after {1} sec", uri.Host, interval);
             HostsFails.Remove(uri.Host);
         }
     }
