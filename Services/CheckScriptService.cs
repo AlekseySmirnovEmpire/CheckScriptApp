@@ -6,31 +6,21 @@ namespace CheckScriptApp.Services;
 
 public class CheckScriptService(SettingsConfig settingsConfig, ILogger<CheckScriptService> logger)
 {
-    public void CheckAllHostsForScriptScript()
-    {
-        using var finished = new CountdownEvent(1);
-        foreach (var obj in settingsConfig.HostsToCheck.Select((x, i) => new { Item = x, Index = i }))
-        {
-            finished.AddCount();
-            try
+    public async Task CheckAllHostsForScriptScript() =>
+        await Task.WhenAll(
+            settingsConfig.HostsToCheck.Select(uri => Task.Run(async () =>
             {
-                ThreadPool.QueueUserWorkItem(async void (_) => await CheckHost(obj.Item), null);
-                settingsConfig.CheckSuccessHostCheck(obj.Item);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("{0}", ex);
-                settingsConfig.AddFailedHost(obj.Item);
-            }
-            finally
-            {
-                finished.Signal();
-            }
-        }
-
-        finished.Signal();
-        finished.Wait();
-    }
+                try
+                {
+                    await CheckHost(uri);
+                    settingsConfig.CheckSuccessHostCheck(uri);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError("{0}", ex);
+                    settingsConfig.AddFailedHost(uri);
+                }
+            })));
 
     private async Task CheckHost(Uri uri)
     {

@@ -10,12 +10,7 @@ public class CheckScriptOnHostJob(
     CheckScriptService service)
     : BaseJob(nameof(CheckScriptOnHostJob), logger, null, settingsConfig.IntervalInSeconds)
 {
-    protected override Task Execute()
-    {
-        service.CheckAllHostsForScriptScript();
-
-        return Task.CompletedTask;
-    }
+    protected override async Task Execute() => await service.CheckAllHostsForScriptScript();
 
     protected override void LogError(Exception ex) => logger.LogError("{0}", ex);
 
