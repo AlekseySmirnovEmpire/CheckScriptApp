@@ -15,3 +15,8 @@
 dotnet run -i [interval] [uri_1] [uri_2] ... [uri_N]
 ```
 Параметр `-i` является обязательным, интервал передаётся в секундах
+
+## Пример запуска
+```shell
+dotnet run -i 10 http://ru.drivemusic.me/ https://rus.hitmotop.com/ https://pinkamuz.pro/ https://mp3bob.ru/ http://vuxo7.com/
+```
